@@ -190,23 +190,30 @@ def ingest_csv_data(filename: str):
     Keyword arguments:
     filename: the name of the CSV file that you want to ingest into the database.
     """
-
+    
     #1 Connect to the database file "utsc-excercise" using one of the helper functions above
     #  and save the return value into a variable called db_connection.
-
+    db_path = 'utsc-exercise.db'
+    db_connection = connect_to_db(db_path)
+    
     #2 Use pandas to load the CSV 'filename' into a dataframe which we'll call 'df'. If you are doing
     # any cleaning of the dataframe after loading it, make a new variable called 'cleaned_df' and store the cleaned
     # dataframe there.
-
+    df = pd.read_csv(filename)
+    cleaned_df = remove_unnamed_columns(df)
+    
     #3 Now that you have the CSV data loaded into a dataframe, you need to insert the data into the SQL database.
     # Using the dataframe that you created above, as well as the database connection that you have instantiated,
     # use one of the helper functions above to insert the data into the database.
+    insert_employee_data_into_db(db_connection, cleaned_df)
 
     #4 Now to show that you've finished processing the CSV file, move the file over to the hist folder 
     # Hint: use shutil.move and read the parameters it takes)
     # Hint: I personally use f-strings to use variables in the middle of strings, so in the destination path to move the file, I'd use f"hist/{filename}"
     # If you want the formal definition of what an f-string does: https://www.geeksforgeeks.org/formatted-string-literals-f-strings-python/
-    
+    destination = f"hist/{filename}" 
+    shutil.move(filename, destination)
+
 
 def print_employee_dataframe():
     """Connects to the database, puts the Employee table into a dataframe, and then prints the dataframe.
@@ -219,5 +226,6 @@ def print_employee_dataframe():
 
 if __name__ == '__main__':
     #TODO: UNCOMMENT THIS TO INGEST THE DATA ONCE YOU HAVE COMPLETED THE FUNCTION ABOVE
-    # ingest_csv_data("legacy_employees.csv")
+    ingest_csv_data("legacy_employees.csv")
     print_employee_dataframe()
+    get_count_of_records_in_employee_table()

@@ -36,21 +36,52 @@ def get_avg_salary_by_job_title(employee_salary_df: pd.DataFrame, selected_title
     
     #Plot the graph
     st.subheader("Average Salary by Job Title")
-    st.bar_chart(avg_salary_by_job_title, x = 'Job', y = 'YearlyCompensation')
+    st.bar_chart(avg_salary_by_job_title, x = 'JobTitle', y = 'YearlyCompensation')
 
 
 #TODO: MAKE THIS USING THE MODEL FUNCTION ABOVE (Copy pasting is your friend here)
 # HINT: The country column in the dataframe is 'Country'
 def get_avg_salary_by_country(employee_salary_df: pd.DataFrame, selected_countries: list):
-    pass
+
+    # Filter the dataframe based on selected countries
+    filtered_df = employee_salary_df[employee_salary_df['Country'].isin(selected_countries)]
+
+    # Group by country and calculate the average salary
+    avg_salary_by_country=filtered_df.groupby('Country')['YearlyCompensation'].mean().reset_index()
+    
+    #Plot the graph
+    st.subheader("Average Salary by Country")
+    st.bar_chart(avg_salary_by_country, x = 'Country', y = 'YearlyCompensation')
 
 #TODO: MAKE THIS USING THE MODEL FUNCTION ABOVE (Copy pasting is your friend here)
 def get_num_employees_by_country(employee_salary_df: pd.DataFrame, selected_countries: list):
-    pass
+
+    # Filter the dataframe based on selected countries
+    filtered_df = employee_salary_df[employee_salary_df['Country'].isin(selected_countries)]
+    
+    # Group by country and count the number of employees
+    num_employees_by_country = filtered_df.groupby('Country')['YearlyCompensation'].count().reset_index()
+    num_employees_by_country.rename(columns={'YearlyCompensation': 'NumberOfEmployees'}, inplace=True) #change the column name
+
+    #Plot the graph
+    st.subheader("Number of Employees by country")
+    st.bar_chart(num_employees_by_country, x = 'Country', y = 'NumberOfEmployees')
+
 
 #TODO: MAKE THIS USING THE MODEL FUNCTION ABOVE (Copy pasting is your friend here)
 def get_num_employees_by_job_title(employee_salary_df: pd.DataFrame, selected_titles: list):
-    pass
+        
+    # Filter the dataframe based on selected job titles
+    filtered_df = employee_salary_df[employee_salary_df['JobTitle'].isin(selected_titles)]
+
+    # Group by JobTitle and count the number of employees
+    num_employees_by_job_title = filtered_df.groupby('JobTitle')['YearlyCompensation'].count().reset_index()
+    num_employees_by_job_title.rename(columns={'YearlyCompensation': 'NumberOfEmployees'}, inplace=True) #change the column name
+    
+    #Plot the graph
+    st.subheader("Number of Employees by Job Title")
+    st.bar_chart(num_employees_by_job_title, x = 'JobTitle', y = 'NumberOfEmployees')
+
 
 if __name__ == '__main__':
     # Streamlit app title
